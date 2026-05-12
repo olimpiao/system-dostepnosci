@@ -13,6 +13,25 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
+
+            $table->string('title');
+            $table->text('description');
+
+            $table->string('reporter_name');
+            $table->string('organization')->nullable();
+
+            $table->string('wcag_criterion');
+
+            $table->enum('status', [
+                'new',
+                'in_progress',
+                'resolved'
+            ])->default('new');
+
+            $table->foreignId('category_id')
+                ->constrained()
+                ->onDelete('cascade');
+
             $table->timestamps();
         });
     }

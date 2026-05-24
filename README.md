@@ -16,5 +16,5 @@ Aplikacja webowa służąca do zgłaszania oraz zarządzania problemami z dostę
 - Laravel (framework)
 - SQLite (baza danych)
 - Blade (szablony widoków)
-- Bootstrap (interfejs użytkownika)
+- Tailwind CSS (interfejs użytkownika)
 - Docker (środowisko uruchomieniowe)

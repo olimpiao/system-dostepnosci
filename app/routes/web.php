@@ -3,9 +3,13 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\ReportController;
+
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/reports');
 });
+
+Route::resource('reports', ReportController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

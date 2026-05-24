@@ -12,15 +12,16 @@ class ReportController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $reports = Report::latest()->get();
 
+        return view('reports.index', compact('reports'));
+    }
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return view('reports.create');
     }
 
     /**
@@ -28,7 +29,16 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'reporter_name' => 'required',
+            'organization' => 'nullable',
+        ]);
+
+        Report::create($validated);
+
+        return redirect('/reports');
     }
 
     /**

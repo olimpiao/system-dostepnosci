@@ -3,46 +3,154 @@
 @section('content')
 
 <div class="flex justify-between items-center mb-6">
+
     <h1 class="text-3xl font-bold">
         Lista zgłoszeń
     </h1>
 
     <a href="{{ route('reports.create') }}"
-        class="bg-blue-600 text-white px-4 py-2 rounded">
+        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+
         Dodaj zgłoszenie
+
     </a>
+
 </div>
 
 @if($reports->count())
 
-<div class="space-y-4">
+<div class="overflow-x-auto bg-white rounded shadow">
 
-    @foreach($reports as $report)
+    <table class="w-full">
 
-    <div class="border rounded p-4 shadow">
+        <thead class="bg-gray-100">
 
-        <h2 class="text-xl font-semibold">
-            {{ $report->title }}
-        </h2>
+            <tr>
 
-        <p class="text-gray-600 mt-2">
-            {{ $report->description }}
-        </p>
+                <th class="text-left p-4">
+                    Tytuł
+                </th>
 
-        <div class="mt-3 text-sm text-gray-500">
-            Status: {{ $report->status }}
-        </div>
+                <th class="text-left p-4">
+                    Kategoria
+                </th>
 
-    </div>
+                <th class="text-left p-4">
+                    Status
+                </th>
 
-    @endforeach
+                <th class="text-left p-4">
+                    Zgłaszający
+                </th>
+
+                <th class="text-left p-4">
+                    Akcje
+                </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @foreach($reports as $report)
+
+            <tr class="border-t">
+
+                <td class="p-4">
+
+                    <div class="font-semibold">
+                        {{ $report->title }}
+                    </div>
+
+                    <div class="text-sm text-gray-500 mt-1">
+                        {{ $report->description }}
+                    </div>
+
+                </td>
+
+                <td class="p-4">
+
+                    {{ $report->category->name }}
+
+                </td>
+
+                <td class="p-4">
+
+                    @if($report->status == 'Nowe')
+
+                    <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
+                        {{ $report->status }}
+                    </span>
+
+                    @elseif($report->status == 'W trakcie')
+
+                    <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
+                        {{ $report->status }}
+                    </span>
+
+                    @else
+
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                        {{ $report->status }}
+                    </span>
+
+                    @endif
+
+                </td>
+
+                <td class="p-4 text-gray-600">
+
+                    {{ $report->reporter_name }}
+
+                </td>
+
+                <td class="p-4">
+
+                    <div class="flex gap-2">
+
+                        <a href="{{ route('reports.edit', $report) }}"
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
+
+                            Edytuj
+
+                        </a>
+
+                        <form action="{{ route('reports.destroy', $report) }}"
+                            method="POST">
+
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit"
+                                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+
+                                Usuń
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+            @endforeach
+
+        </tbody>
+
+    </table>
 
 </div>
 
 @else
 
 <div class="bg-gray-100 p-6 rounded">
+
     Brak zgłoszeń.
+
 </div>
 
 @endif

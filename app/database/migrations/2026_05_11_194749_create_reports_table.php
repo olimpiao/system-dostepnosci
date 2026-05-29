@@ -20,13 +20,7 @@ return new class extends Migration
             $table->string('reporter_name');
             $table->string('organization')->nullable();
 
-            $table->string('wcag_criterion');
-
-            $table->enum('status', [
-                'new',
-                'in_progress',
-                'resolved'
-            ])->default('new');
+            $table->string('status')->default('Nowe');
 
             $table->foreignId('category_id')
                 ->constrained()

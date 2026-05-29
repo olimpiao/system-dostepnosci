@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Report;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class ReportController extends Controller
 {
@@ -12,7 +13,9 @@ class ReportController extends Controller
      */
     public function index()
     {
-        $reports = Report::latest()->get();
+        $reports = Report::with('category')
+            ->latest()
+            ->get();
 
         return view('reports.index', compact('reports'));
     }
@@ -21,7 +24,8 @@ class ReportController extends Controller
      */
     public function create()
     {
-        return view('reports.create');
+        $categories = Category::all();
+        return view('reports.create', compact('categories'));
     }
 
     /**
@@ -34,6 +38,8 @@ class ReportController extends Controller
             'description' => 'required',
             'reporter_name' => 'required',
             'organization' => 'nullable',
+            'category_id' => 'required',
+            'status' => 'required',
         ]);
 
         Report::create($validated);
@@ -54,7 +60,12 @@ class ReportController extends Controller
      */
     public function edit(Report $report)
     {
-        //
+        $categories = Category::all();
+
+        return view('reports.edit', compact(
+            'report',
+            'categories'
+        ));
     }
 
     /**
@@ -62,7 +73,20 @@ class ReportController extends Controller
      */
     public function update(Request $request, Report $report)
     {
-        //
+        $validated = $request->validate([
+
+            'title' => 'required',
+            'description' => 'required',
+            'reporter_name' => 'required',
+            'organization' => 'nullable',
+            'status' => 'required',
+            'category_id' => 'required',
+
+        ]);
+
+        $report->update($validated);
+
+        return redirect()->route('reports.index');
     }
 
     /**
@@ -70,6 +94,7 @@ class ReportController extends Controller
      */
     public function destroy(Report $report)
     {
-        //
+        $report->delete();
+        return redirect()->route('reports.index');
     }
 }
